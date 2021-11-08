@@ -5,7 +5,7 @@ import json
 import time
 import re
 
-TOKEN = 'OTA3MjQxNDU3OTQ4MTc2Mzg0.YYkUcw.wu7cVOJrSs2vmxefawm9uL_-3Nc'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 client = discord.Client()
 
