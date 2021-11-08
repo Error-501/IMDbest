@@ -3,8 +3,9 @@ import requests
 import random
 import json
 import time
+import re
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = 'OTA3MjQxNDU3OTQ4MTc2Mzg0.YYkUcw.wu7cVOJrSs2vmxefawm9uL_-3Nc'
 
 client = discord.Client()
 
@@ -55,8 +56,14 @@ async def on_message(message):
               msg += '\n'
               msg += json.loads(response).get('d')[0].get('l')
               movieid = json.loads(response).get('d')[0].get('id')
-              imdburl = 'https://imdb8.p.rapidapi.com/title/get-ratings'
+              imdburl = 'https://imdb8.p.rapidapi.com/title/get-genres'
               qstring = {"tconst": movieid}
+              response = requests.request("GET", imdburl, headers=headers, params=qstring).text
+              msg += '\nGenre: '
+              y = str(json.loads(response))
+              y = ",".join([i for i in re.split("[^a-zA-Z]", y) if i])
+              msg += y
+              imdburl = 'https://imdb8.p.rapidapi.com/title/get-ratings'
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               msg += '\nYear: '
               msg += str(json.loads(response).get('year'))
@@ -206,3 +213,4 @@ async def on_ready():
        print('------')
 
 client.run(TOKEN)
+
