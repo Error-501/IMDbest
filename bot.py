@@ -5,7 +5,8 @@ import json
 import time
 import re
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = env.process.DISCORD_TOKEN
+API_TOKEN = env.process.API_TOKEN
 
 client = discord.Client()
 
@@ -38,6 +39,7 @@ async def on_message(message):
               for i in range(len(msg)):
                      await message.channel.send(msg[i])
        elif message.content.startswith('!answer'):
+              answered = 0
               u_ans = message.content.replace('!answer ', '')
               if u_ans.lower() == answer.lower() and answered == False:
                      await message.channel.send('Congratulations {0.author.mention}! That is the correct answer!'.format(message))
@@ -47,7 +49,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!imdb ','')}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               cast = json.loads(response).get("d")[0].get('s')
@@ -77,7 +79,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!rating ', '')}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               image = json.loads(response).get('d')[0].get('i').get('imageUrl')
@@ -96,7 +98,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!year ', '')}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               image = json.loads(response).get('d')[0].get('i').get('imageUrl')
@@ -115,7 +117,7 @@ async def on_message(message):
               qstring = {"currentCountry":"US","purchaseCountry":"US","homeCountry":"US"}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               imdburl = "https://imdb8.p.rapidapi.com/actors/get-bio"
@@ -140,7 +142,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!cast ', '')}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               cast = json.loads(response).get("d")[0].get('s')
@@ -153,7 +155,7 @@ async def on_message(message):
               qstring = {"purchaseCountry": "US", "homeCountry": "US", "currentCountry": "US"}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               imdburl = 'https://imdb8.p.rapidapi.com/title/get-meta-data'
@@ -177,7 +179,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!like ', '')}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               movieid = json.loads(response).get('d')[0].get('id')
@@ -186,7 +188,7 @@ async def on_message(message):
               qstring = {"tconst":movieid}
               headers = {
                      'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                     'x-rapidapi-key': API_TOKEN
               }
               response = requests.request("GET", imdburl, headers=headers, params=qstring).text
               imdburl = 'https://imdb8.p.rapidapi.com/title/get-meta-data'
