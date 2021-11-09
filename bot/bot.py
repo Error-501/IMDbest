@@ -25,7 +25,6 @@ async def on_message(message):
               global question
               global r
               global answered
-              answered = False
               url = random.choice(urls)
               r = requests.get(url).text
               question = json.loads(r).get('results')[0].get('question')
