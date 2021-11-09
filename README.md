@@ -1,2 +1,3 @@
-# IMDbest
-"The best" discord bot for movie trivia, recommendation and information
+# IMDbot
+
+A simple discord bot for IMDb API
