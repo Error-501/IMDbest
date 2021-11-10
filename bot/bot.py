@@ -6,9 +6,10 @@ import time
 import re
 import io
 import aiohttp
+import os
 
-TOKEN = env.process.DISCORD_TOKEN
-API_TOKEN = env.process.API_TOKEN
+TOKEN = os.environ.get("DISCORD_TOKEN")
+API_TOKEN = os.environ.get("API_TOKEN")
 
 client = discord.Client()
 
