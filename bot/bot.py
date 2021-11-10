@@ -9,6 +9,7 @@ import aiohttp
 import os
 
 TOKEN = os.environ.get("DISCORD_TOKEN")
+
 API_TOKEN = os.environ.get("API_TOKEN")
 
 client = discord.Client()
@@ -51,7 +52,7 @@ async def on_message(message):
               qstring = {"q": message.content.replace('!imdb ', '')}
               headers = {
               'x-rapidapi-host': "imdb8.p.rapidapi.com",
-              'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+              'x-rapidapi-key': API_TOKEN 
               }
               response = requests.request(
               "GET", imdburl, headers=headers, params=qstring).text
