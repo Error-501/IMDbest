@@ -4,6 +4,8 @@ import random
 import json
 import time
 import re
+import io
+import aiohttp
 
 TOKEN = env.process.DISCORD_TOKEN
 API_TOKEN = env.process.API_TOKEN
@@ -45,33 +47,44 @@ async def on_message(message):
                      answered = True
        elif message.content.startswith('!imdb'):
               imdburl = "https://imdb8.p.rapidapi.com/title/auto-complete"
-              qstring = {"q": message.content.replace('!imdb ','')}
+              qstring = {"q": message.content.replace('!imdb ', '')}
               headers = {
-                     'x-rapidapi-host': "imdb8.p.rapidapi.com",
-                     'x-rapidapi-key': API_TOKEN
+              'x-rapidapi-host': "imdb8.p.rapidapi.com",
+              'x-rapidapi-key': "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
               }
-              response = requests.request("GET", imdburl, headers=headers, params=qstring).text
+              response = requests.request(
+              "GET", imdburl, headers=headers, params=qstring).text
               cast = json.loads(response).get("d")[0].get('s')
               image = json.loads(response).get('d')[0].get('i').get('imageUrl')
-              msg = image
+              #  get-image
+              async with aiohttp.ClientSession() as session:
+                     async with session.get(image) as resp:
+                            if resp.status != 200:
+                                   return await channel.send('Could not download file...')
+                            data = io.BytesIO(await resp.read())
+              msg=''
               msg += '\n'
               msg += json.loads(response).get('d')[0].get('l')
               movieid = json.loads(response).get('d')[0].get('id')
               imdburl = 'https://imdb8.p.rapidapi.com/title/get-genres'
               qstring = {"tconst": movieid}
-              response = requests.request("GET", imdburl, headers=headers, params=qstring).text
+              response = requests.request(
+              "GET", imdburl, headers=headers, params=qstring).text
               msg += '\nGenre: '
-              y = str(json.loads(response))
-              y = ",".join([i for i in re.split("[^a-zA-Z]", y) if i])
-              msg += y
+              genre = str(json.loads(response))
+              genre = ",".join([i for i in re.split("[^a-zA-Z]", genre) if i])
+              msg += genre
               imdburl = 'https://imdb8.p.rapidapi.com/title/get-ratings'
-              response = requests.request("GET", imdburl, headers=headers, params=qstring).text
+              qstring = {"tconst": movieid}
+              response = requests.request(
+              "GET", imdburl, headers=headers, params=qstring).text
               msg += '\nYear: '
               msg += str(json.loads(response).get('year'))
               msg += '\nRating: '
               msg += str(json.loads(response).get("rating"))
               msg += '\nTop Cast: '
               msg += cast
+              await message.channel.send(file=discord.File(data, 'poster.png'))
               await message.channel.send(msg)
        elif message.content.startswith('!rating'):
               imdburl = "https://imdb8.p.rapidapi.com/title/auto-complete"
